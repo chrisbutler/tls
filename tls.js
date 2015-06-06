@@ -1,4 +1,11 @@
 tls = {
+  labels: {
+    headings: {
+      default: ['#', 'PRODUCT', 'GAL', 'ULL', 'IN', 'W', '&deg;F'],
+      full: ['Number', 'Product', 'Gallons', 'Ullage', 'Inches', 'Water', 'Temperature (&deg;F)'],
+      meta: ['id', 'product', 'gallons', 'tcgallons', 'ullage', 'inches', 'water', 'temp']
+    }
+  },
   parse: {
     IEEE: function(num) {
       if (num == 0) return 0;
@@ -15,24 +22,30 @@ tls = {
       return (tls.parse.IEEE(num)).toFixed(0);
     }
   },
-  extract: {
-    tanks: function(responseString) {
+  tanks: {
+    extract: function(responseString) {
       responseString = responseString.substring(16);
 
       var pattern = /(\d{2})(.{1})(\d{4})07(.{56})&?&?/g;
       var values = [];
-      var match = 0;
+      var tank = 0;
 
       responseString.replace(pattern, function(m, g1, g2, g3, g4) {
-        var matches = [];
-        matches[0] = match + 1;
+
+        console.log('replace', m, '\n', g1, '\n', g2, '\n', g3, '\n', g4);
+
+        var matches = {};
+        matches.id = g1;
+        matches.product = g2;
         for(var i = 0; i < 48; i += 8) {
-          var idx = i / 8;
-          matches[idx + 1] = tls.parse.int(g4.substring(i, i + 8));
+          var idx = (i / 8) + 2;
+          matches[tls.labels.headings.meta[idx]] = tls.parse.int(g4.substring(i, i + 8));
         }
-        values[match] = matches;
-        match++;
+        values.push(matches);
+        tank++;
       });
+
+      console.log('values', values);
 
       return values;
     }
@@ -61,7 +74,7 @@ if (Meteor.isServer) {
           responseString += s;
           if (s == '&') {
             client.end()
-            fut.return(tls.extract.tanks(responseString));
+            fut.return(tls.tanks.extract(responseString));
           }
         }
       });
@@ -77,7 +90,6 @@ if (Meteor.isServer) {
       return fut.wait();
     },
     '/tls/getTankNames': function(ip, port) {
-      
       return;
     }
   });
