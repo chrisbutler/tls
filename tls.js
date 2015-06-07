@@ -1,54 +1,52 @@
-tls = {
-  labels: {
-    headings: {
-      default: ['#', 'PRODUCT', 'GAL', 'ULL', 'IN', 'W', '&deg;F'],
-      full: ['Number', 'Product', 'Gallons', 'Ullage', 'Inches', 'Water', 'Temperature (&deg;F)'],
-      meta: ['id', 'product', 'gallons', 'tcgallons', 'ullage', 'inches', 'water', 'temp']
-    }
+tls = {};
+
+tls.labels = {
+  headings: {
+    default: ['#', 'PRODUCT', 'GAL', 'TC GAL', 'ULL', 'IN', 'W', '&deg;F'],
+    full: ['Number', 'Product', 'Gallons', 'TC Gallons', 'Ullage', 'Inches', 'Water', 'Temperature (&deg;F)'],
+    meta: ['id', 'product', 'gallons', 'tcgallons', 'ullage', 'inches', 'water', 'temp']
+  }
+};
+
+tls.parse = {
+  IEEE: function(num) {
+    if (num == 0) return 0;
+
+    num = '0x' + num;
+
+    var sign = (num & 0x80000000) ? -1 : 1;
+    var exponent = ((num >> 23) & 0xff) - 127;
+    var mantissa = 1 + ((num & 0x7fffff) / 0x7fffff);
+
+    return sign * mantissa * Math.pow(2, exponent);
   },
-  parse: {
-    IEEE: function(num) {
-      if (num == 0) return 0;
+  int: function(num) {
+    return (tls.parse.IEEE(num)).toFixed(0);
+  }
+};
 
-      num = '0x' + num;
+tls.tanks = {
+  extract: function(responseString) {
+    responseString = responseString.substring(16);
 
-      var sign = (num & 0x80000000) ? -1 : 1;
-      var exponent = ((num >> 23) & 0xff) - 127;
-      var mantissa = 1 + ((num & 0x7fffff) / 0x7fffff);
+    var pattern = /(\d{2})(.{1})(\d{4})07(.{56})&?&?/g;
+    var values = [];
+    var tank = 0;
 
-      return sign * mantissa * Math.pow(2, exponent);
-    },
-    int: function(num) {
-      return (tls.parse.IEEE(num)).toFixed(0);
-    }
-  },
-  tanks: {
-    extract: function(responseString) {
-      responseString = responseString.substring(16);
+    responseString.replace(pattern, function(m, g1, g2, g3, g4) {
+      //console.log('replace', m, '\n', g1, '\n', g2, '\n', g3, '\n', g4);
+      var matches = {};
+      matches.id = g1;
+      matches.product = g2;
+      for(var i = 0; i < 48; i += 8) {
+        var idx = (i / 8) + 2;
+        matches[tls.labels.headings.meta[idx]] = tls.parse.int(g4.substring(i, i + 8));
+      }
+      values.push(matches);
+      tank++;
+    });
 
-      var pattern = /(\d{2})(.{1})(\d{4})07(.{56})&?&?/g;
-      var values = [];
-      var tank = 0;
-
-      responseString.replace(pattern, function(m, g1, g2, g3, g4) {
-
-        console.log('replace', m, '\n', g1, '\n', g2, '\n', g3, '\n', g4);
-
-        var matches = {};
-        matches.id = g1;
-        matches.product = g2;
-        for(var i = 0; i < 48; i += 8) {
-          var idx = (i / 8) + 2;
-          matches[tls.labels.headings.meta[idx]] = tls.parse.int(g4.substring(i, i + 8));
-        }
-        values.push(matches);
-        tank++;
-      });
-
-      console.log('values', values);
-
-      return values;
-    }
+    return values;
   }
 };
 
@@ -73,7 +71,8 @@ if (Meteor.isServer) {
           var s = chunk.toString();
           responseString += s;
           if (s == '&') {
-            client.end()
+            client.end();
+            //FIXME refactor with options’
             fut.return(tls.tanks.extract(responseString));
           }
         }
