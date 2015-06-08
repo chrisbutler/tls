@@ -1,0 +1,23 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc"]
+    },
+    "source": {
+        "include": ["README.md"],
+        "excludePattern": "(node_modules/|docs/|package.js)"
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": true
+    },
+    "opts": {
+        "destination": "./docs",
+        "encoding": "utf8",
+        "private": true,
+        "template": "./node_modules/minami"
+    }
+}
