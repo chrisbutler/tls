@@ -1,4 +1,8 @@
-tls.labels = {
+tls.utils = {
+
+};
+
+tls.utils.labels = {
   headings: {
     default: ['#', 'PRODUCT', 'GAL', 'TC GAL', 'ULL', 'IN', 'W', '&deg;F'],
     full: ['Number', 'Product', 'Gallons', 'TC Gallons', 'Ullage', 'Inches', 'Water', 'Temperature (&deg;F)'],
@@ -6,7 +10,7 @@ tls.labels = {
   }
 };
 
-tls.parse = {
+tls.utils.parse = {
   IEEE: function(num) {
     if (num == 0) return 0;
 
@@ -19,11 +23,11 @@ tls.parse = {
     return sign * mantissa * Math.pow(2, exponent);
   },
   int: function(num) {
-    return (tls.parse.IEEE(num)).toFixed(0);
+    return (tls.utils.parse.IEEE(num)).toFixed(0);
   }
 };
 
-tls.tanks = {
+tls.utils.tanks = {
   extract: function(responseString) {
     responseString = responseString.substring(16);
 
@@ -38,7 +42,7 @@ tls.tanks = {
       matches.product = g2;
       for(var i = 0; i < 48; i += 8) {
         var idx = (i / 8) + 2;
-        matches[tls.labels.headings.meta[idx]] = tls.parse.int(g4.substring(i, i + 8));
+        matches[tls.utils.labels.headings.meta[idx]] = tls.utils.parse.int(g4.substring(i, i + 8));
       }
       values.push(matches);
       tank++;
