@@ -1,6 +1,4 @@
-tls.utils = {
-
-};
+tls.utils = {};
 
 tls.utils.labels = {
   headings: {
@@ -28,14 +26,14 @@ tls.utils.parse = {
 };
 
 tls.utils.tanks = {
-  extract: function(responseString) {
-    responseString = responseString.substring(16);
+  extract: function(data) {
+    data = data.substring(16);
 
     var pattern = /(\d{2})(.{1})(\d{4})07(.{56})&?&?/g;
     var values = [];
     var tank = 0;
 
-    responseString.replace(pattern, function(m, g1, g2, g3, g4) {
+    data.replace(pattern, function(m, g1, g2, g3, g4) {
       //console.log('replace', m, '\n', g1, '\n', g2, '\n', g3, '\n', g4);
       var matches = {};
       matches.id = g1;
@@ -49,5 +47,20 @@ tls.utils.tanks = {
     });
 
     return values;
+  },
+  names: function(data) {
+    data = data.replace(/(\s\d{1}\s+\b\w+\b)\s(\b\w+\b)/g, "$1-$2");
+
+    var list = data.match(/[\d\.\w\-]+/g);
+    list.shift();
+    list.splice(0, 23);
+
+    var names = Array();
+    do {
+      var row = list.splice(0, 7);
+      names.push(row[1].replace('-', ' '));
+    } while (list.length > 0);
+
+    return names;
   }
 };

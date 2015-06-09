@@ -20,6 +20,7 @@ tls.connect = function tls(ip, port) {
  */
 tls.connect.prototype.getTankNames = function getTankNames() {
 	var res = this.api('200');
+  res = tls.utils.tanks.names(res);
   return res;
 };
 
