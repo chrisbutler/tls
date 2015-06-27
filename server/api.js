@@ -9,13 +9,14 @@ var ETX = String.fromCharCode(3);
  * @param {string} ip TLS IP Address
  * @param {number} port TLS Port
  */
-tls.connect = function tls(ip, port) {
+tls.connect = function tls(ip, port, tankNames) {
 	this.ip = ip;
 	this.port = port;
+	this.tankNames = tankNames || this.getTankNames();
 };
 
 /**
- * Returns an array of tanks objects
+ * Returns an array of tank names
  * @param  {Array} tanks TLS tanks
  */
 tls.connect.prototype.getTankNames = function getTankNames() {

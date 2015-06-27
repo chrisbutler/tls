@@ -58,7 +58,9 @@ tls.utils.tanks = {
     var names = Array();
     do {
       var row = list.splice(0, 7);
-      names.push(row[1].replace('-', ' '));
+      if (row && row[1]) {
+        names.push(row[1].replace('-', ' '));
+      }
     } while (list.length > 0);
 
     return names;
