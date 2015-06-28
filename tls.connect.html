@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="tls.connect.html">connect</a><ul class='methods'><li data-type='method'><a href="tls.connect.html#api">api</a></li><li data-type='method'><a href="tls.connect.html#getTank">getTank</a></li><li data-type='method'><a href="tls.connect.html#getTankNames">getTankNames</a></li><li data-type='method'><a href="tls.connect.html#getTanks">getTanks</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="tls.html">tls</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TLS.connect.html">connect</a><ul class='methods'><li data-type='method'><a href="TLS.connect.html#api">api</a></li><li data-type='method'><a href="TLS.connect.html#getTank">getTank</a></li><li data-type='method'><a href="TLS.connect.html#getTankNames">getTankNames</a></li><li data-type='method'><a href="TLS.connect.html#getTanks">getTanks</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="TLS.html">TLS</a></li></ul>
 </nav>
 
 <div id="main">
@@ -41,7 +41,7 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="tls.html">tls</a>.</span>
+            <span class="ancestors"><a href="TLS.html">TLS</a>.</span>
         
         connect
         </h2>
@@ -56,7 +56,7 @@
 
     
 
-    <h4 class="name" id="connect"><span class="type-signature"></span>new connect<span class="signature">(ip, port)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="connect"><span class="type-signature"></span>new connect<span class="signature">(ip, port, tankNames)</span><span class="type-signature"></span></h4>
 
     
 
@@ -105,7 +105,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -128,7 +128,7 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">Number</span>
 
 
             
@@ -139,6 +139,29 @@
             
 
             <td class="description last"><p>TLS Port</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tankNames</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Product List</p></td>
         </tr>
 
     
@@ -179,7 +202,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line12">line 12</a>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -228,7 +251,7 @@
 
     
 
-    <h4 class="name" id="api"><span class="type-signature"></span>api<span class="signature">(code, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="api"><span class="type-signature"></span>api<span class="signature">(code, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -334,6 +357,39 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Function to execute on completion</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -371,7 +427,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line49">line 49</a>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -402,7 +458,7 @@
 
     
 
-    <h4 class="name" id="getTank"><span class="type-signature"></span>getTank<span class="signature">(tankId, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getTank"><span class="type-signature"></span>getTank<span class="signature">(tankId, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -433,6 +489,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -458,6 +516,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -481,10 +547,20 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>function(error, tank)</p></td>
+            <td class="description last"><p>callback function</p></td>
         </tr>
 
     
@@ -525,7 +601,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line40">line 40</a>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -556,14 +632,14 @@
 
     
 
-    <h4 class="name" id="getTankNames"><span class="type-signature"></span>getTankNames<span class="signature">(tanks)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getTankNames"><span class="type-signature"></span>getTankNames<span class="signature">(tanks, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Returns an array of tanks objects</p>
+    <p>Returns an array of tank names</p>
 </div>
 
 
@@ -586,6 +662,8 @@
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -612,10 +690,51 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>TLS tanks</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>callback function</p></td>
         </tr>
 
     
@@ -656,7 +775,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line21">line 21</a>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -687,7 +806,7 @@
 
     
 
-    <h4 class="name" id="getTanks"><span class="type-signature"></span>getTanks<span class="signature">(tanks)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getTanks"><span class="type-signature"></span>getTanks<span class="signature">(tanks, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -718,6 +837,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -743,10 +864,51 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>TLS tanks</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>callback function</p></td>
         </tr>
 
     
@@ -787,7 +949,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line31">line 31</a>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -831,7 +993,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Mon Jun 08 2015 21:02:29 GMT-0400 (EDT) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Sun Jun 28 2015 03:52:06 GMT-0400 (EDT) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
