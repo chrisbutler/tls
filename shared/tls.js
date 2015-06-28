@@ -1,2 +1,2 @@
 /** @namespace */
-tls = {};
+TLS = {};

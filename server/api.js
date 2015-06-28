@@ -9,19 +9,23 @@ var ETX = String.fromCharCode(3);
  * @param {string} ip TLS IP Address
  * @param {number} port TLS Port
  */
-tls.connect = function tls(ip, port, tankNames) {
+TLS.connect = function TLS(ip, port, tankNames) {
+	var fut = new future();
+
 	this.ip = ip;
 	this.port = port;
-	this.tankNames = tankNames || this.getTankNames();
+	this.tankNames = tankNames || this.getTankNames(function() { fut.return(); });
+
+	return fut.wait();
 };
 
 /**
  * Returns an array of tank names
  * @param  {Array} tanks TLS tanks
  */
-tls.connect.prototype.getTankNames = function getTankNames() {
-	var res = this.api('200');
-  res = tls.utils.tanks.names(res);
+TLS.connect.prototype.getTankNames = function getTankNames(cb) {
+	var res = this.api('200', cb);
+  res = TLS.utils.tanks.names(res);
   return res;
 };
 
@@ -29,8 +33,10 @@ tls.connect.prototype.getTankNames = function getTankNames() {
  * Returns an array of tanks objects
  * @param  {Array} tanks TLS tanks
  */
-tls.connect.prototype.getTanks = function getTanks() {
-	return tls.utils.tanks.extract(this.api('i20100'));
+TLS.connect.prototype.getTanks = function getTanks() {
+	var t = this.api('i20100');
+	console.log('getTanks', t);
+	return TLS.utils.tanks.extract(t);
 };
 
 /**
@@ -38,7 +44,7 @@ tls.connect.prototype.getTanks = function getTanks() {
  * @param  {String} tankId TLS tank number
  * @param  {Function} callback function(error, tank)
  */
-tls.connect.prototype.getTank = function getTank(tankId) {
+TLS.connect.prototype.getTank = function getTank(tankId) {
 	this.api('i20100', {id: tankId});
 };
 
@@ -46,11 +52,17 @@ tls.connect.prototype.getTank = function getTank(tankId) {
  * Make a function call
  * @param  {String} code TLS function code
  * @param  {Object} [options] Set call options
+* @param  {Function} [callback] Function to execute on completion
  */
-tls.connect.prototype.api = function api(command, options) {
+TLS.connect.prototype.api = function api(command, options, callback) {
   var fut = new future();
   var responseString = '';
   var _tls = this;
+
+	if (typeof options === 'function' && !callback) {
+		callback = options;
+		options = undefined;
+	}
 
   command = String.fromCharCode(1) + command;
 
@@ -78,6 +90,9 @@ tls.connect.prototype.api = function api(command, options) {
 
   client.on('end', function() {
     console.log(_tls.ip + ' disconnected');
+		setTimeout(function() {
+			typeof callback === 'function' && callback();
+		}, 100);
   });
 
   client.on('timeout', function() {
