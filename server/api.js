@@ -6,8 +6,9 @@ var ETX = String.fromCharCode(3);
 /**
  * TLS API Interface
  * @constructor
- * @param {string} ip TLS IP Address
- * @param {number} port TLS Port
+ * @param {String} ip TLS IP Address
+ * @param {Number} port TLS Port
+ * @param {Array} tankNames Product List
  */
 TLS.connect = function TLS(ip, port, tankNames) {
 	var fut = new future();
@@ -21,13 +22,14 @@ TLS.connect = function TLS(ip, port, tankNames) {
 	} else {
 		this.tankNames = this.getTankNames(fut.return);
 	}
-	
+
 	return fut.wait();
 };
 
 /**
  * Returns an array of tank names
  * @param  {Array} tanks TLS tanks
+ * @param  {Function} [callback] callback function
  */
 TLS.connect.prototype.getTankNames = function getTankNames(cb) {
 	var res = this.api('200', cb);
@@ -38,19 +40,20 @@ TLS.connect.prototype.getTankNames = function getTankNames(cb) {
 /**
  * Returns an array of tanks objects
  * @param  {Array} tanks TLS tanks
+ * @param  {Function} [callback] callback function
  */
-TLS.connect.prototype.getTanks = function getTanks() {
-	var t = this.api('i20100');
+TLS.connect.prototype.getTanks = function getTanks(cb) {
+	var t = this.api('i20100', cb);
 	return TLS.utils.tanks.extract(t);
 };
 
 /**
  * Returns data for the specified tankId
  * @param  {String} tankId TLS tank number
- * @param  {Function} callback function(error, tank)
+ * @param  {Function} [callback] callback function
  */
-TLS.connect.prototype.getTank = function getTank(tankId) {
-	this.api('i20100', {id: tankId});
+TLS.connect.prototype.getTank = function getTank(tankId, cb) {
+	this.api('i20100', {id: tankId}, cb);
 };
 
 /**

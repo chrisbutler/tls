@@ -1,7 +1,7 @@
 Veeder-Root TLS API
 =========
 
-Connects to a TLS-350 tank monitoring system and returns json-formatted tank information. Also includes a `tls.utils` object for data parsing.
+Connects to a TLS-350 tank monitoring system and returns json-formatted tank information. Also includes a `TLS.utils` object for data parsing.
 
 ### Documentation
 
@@ -11,7 +11,7 @@ Connects to a TLS-350 tank monitoring system and returns json-formatted tank inf
 ### Example Usage
 
 ```
-var myTLS = new tls.connect('<ip address>', <port number>);
+var myTLS = new TLS.connect('<ip address>', <port number>);
 
 console.log(myTLS.getTanks());
 
