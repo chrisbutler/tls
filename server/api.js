@@ -14,8 +14,14 @@ TLS.connect = function TLS(ip, port, tankNames) {
 
 	this.ip = ip;
 	this.port = port;
-	this.tankNames = tankNames || this.getTankNames(function() { fut.return(); });
 
+	if (typeof tankNames !== 'undefined') {
+		this.tankNames = tankNames;
+		fut.return();
+	} else {
+		this.tankNames = this.getTankNames(fut.return);
+	}
+	
 	return fut.wait();
 };
 
@@ -66,7 +72,7 @@ TLS.connect.prototype.api = function api(command, options, callback) {
   command = String.fromCharCode(1) + command;
 
   var client = net.connect(_tls.port, _tls.ip, function() {
-    console.log(_tls.ip + ' connected');
+    console.log(_tls.ip + ' connected (' + command + ')');
     client.write(command);
   });
 
