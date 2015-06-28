@@ -35,7 +35,6 @@ TLS.connect.prototype.getTankNames = function getTankNames(cb) {
  */
 TLS.connect.prototype.getTanks = function getTanks() {
 	var t = this.api('i20100');
-	console.log('getTanks', t);
 	return TLS.utils.tanks.extract(t);
 };
 

@@ -27,8 +27,6 @@ TLS.utils.parse = {
 
 TLS.utils.tanks = {
   extract: function(data) {
-    console.log('extract', data);
-    
     data = data.substring(16);
 
     var pattern = /(\d{2})(.{1})(\d{4})07(.{56})&?&?/g;
@@ -36,7 +34,6 @@ TLS.utils.tanks = {
     var tank = 0;
 
     data.replace(pattern, function(m, g1, g2, g3, g4) {
-      //console.log('replace', m, '\n', g1, '\n', g2, '\n', g3, '\n', g4);
       var matches = {};
       matches.id = g1;
       matches.product = g2;
