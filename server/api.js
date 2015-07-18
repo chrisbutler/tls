@@ -15,12 +15,13 @@ TLS.connect = function TLS(ip, port, tankNames) {
 
 	this.ip = ip;
 	this.port = port;
+	this.offset = 0;
 
 	if (typeof tankNames !== 'undefined') {
 		this.tankNames = tankNames;
 		fut.return();
 	} else {
-		this.tankNames = this.getTankNames(fut.return);
+		this.tankNames = this.getTankNames(function() { fut.return() });
 	}
 
 	return fut.wait();
@@ -33,6 +34,7 @@ TLS.connect = function TLS(ip, port, tankNames) {
  */
 TLS.connect.prototype.getTankNames = function getTankNames(cb) {
 	var res = this.api('200', cb);
+	this.offset = TLS.utils.time.offset(res);
   res = TLS.utils.tanks.names(res);
   return res;
 };
@@ -43,8 +45,10 @@ TLS.connect.prototype.getTankNames = function getTankNames(cb) {
  * @param  {Function} [callback] callback function
  */
 TLS.connect.prototype.getTanks = function getTanks(cb) {
-	var t = this.api('i20100', cb);
-	return TLS.utils.tanks.extract(t);
+	var res = this.api('i20100', cb);
+	this.offset = TLS.utils.time.offset(res);
+	console.log(this);
+	return TLS.utils.tanks.extract(res, this.tankNames);
 };
 
 /**
@@ -53,7 +57,8 @@ TLS.connect.prototype.getTanks = function getTanks(cb) {
  * @param  {Function} [callback] callback function
  */
 TLS.connect.prototype.getTank = function getTank(tankId, cb) {
-	this.api('i20100', {id: tankId}, cb);
+	var res = this.api('i20100', {id: tankId}, cb);
+	return res;
 };
 
 /**

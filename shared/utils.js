@@ -3,7 +3,7 @@ TLS.utils = {};
 TLS.utils.labels = {
   headings: {
     default: ['#', 'PRODUCT', 'GAL', 'TC GAL', 'ULL', 'IN', 'W', '&deg;F'],
-    full: ['Number', 'Product', 'Gallons', 'TC Gallons', 'Ullage', 'Inches', 'Water', 'Temperature (&deg;F)'],
+    full: ['Number', 'Product', 'Gallons', 'TC Gallons', 'Ullage', 'Inches', 'Water', 'Temp &deg;F'],
     meta: ['id', 'product', 'gallons', 'tcgallons', 'ullage', 'inches', 'water', 'temp']
   }
 };
@@ -25,9 +25,33 @@ TLS.utils.parse = {
   }
 };
 
+TLS.utils.time = {
+  local: function(response) {
+    var time = response.substr(7, 10);
+    var h = time.match(/.{2}/g);
+    h[0] = '20' + h[0];
+    h[1]--;
+
+    // var d = new (Function.prototype.bind.apply(
+    //   Date, [null].concat(h)
+    // ));
+    //
+
+    var d = moment(h);
+    return d;
+  },
+  offset: function(response) {
+    var d = this.local(response);
+    var o = ((d - moment()) / 60000) / 60;
+    console.log('extract time', d.format(), moment().format(), o);
+    return Math.round(o);
+  }
+
+}
+
 TLS.utils.tanks = {
-  extract: function(data) {
-    data = data.substring(16);
+  extract: function(response, tankNames) {
+    data = response.substring(16);
 
     var pattern = /(\d{2})(.{1})(\d{4})07(.{56})&?&?/g;
     var values = [];
@@ -44,6 +68,12 @@ TLS.utils.tanks = {
       values.push(matches);
       tank++;
     });
+
+    if (tankNames) {
+      _.each(values, function(tank, idx) {
+        values[idx].name = tankNames[idx];
+      });
+    }
 
     return values;
   },
