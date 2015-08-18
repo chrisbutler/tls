@@ -34,14 +34,15 @@ TLS.utils.time = {
     if(h != null) {
       h[0] = '20' + h[0];
       h[1]--;
-      var d = moment().utc(h);
+      var d = moment(h);
     }
 
     return d;
   },
   offset: function(response) {
     var d = this.local(response);
-    var o = ((d - moment().utc()) / 60000) / 60;
+    var m = moment.utc().subtract({minutes: moment().utcOffset()});
+    var o = ((d - m) / 60000) / 60;
     return Math.round(o);
   }
 }
