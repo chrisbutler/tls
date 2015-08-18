@@ -1,6 +1,6 @@
 Package.describe({
   name: 'chrisbutler:tls',
-  version: '2.1.5',
+  version: '2.2.1',
   git: 'https://github.com/chrisbutler/tls',
   summary: 'Returns tank information from VeederRoot monitoring systems',
   documentation: 'README.md'

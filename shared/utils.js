@@ -32,18 +32,12 @@ TLS.utils.time = {
     h[0] = '20' + h[0];
     h[1]--;
 
-    // var d = new (Function.prototype.bind.apply(
-    //   Date, [null].concat(h)
-    // ));
-    //
-
     var d = moment(h);
     return d;
   },
   offset: function(response) {
     var d = this.local(response);
     var o = ((d - moment()) / 60000) / 60;
-    console.log('extract time', d.format(), moment().format(), o);
     return Math.round(o);
   }
 
