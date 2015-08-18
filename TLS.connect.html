@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TLS.connect.html">connect</a><ul class='methods'><li data-type='method'><a href="TLS.connect.html#api">api</a></li><li data-type='method'><a href="TLS.connect.html#getTank">getTank</a></li><li data-type='method'><a href="TLS.connect.html#getTankNames">getTankNames</a></li><li data-type='method'><a href="TLS.connect.html#getTanks">getTanks</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="TLS.html">TLS</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TLS.connect.html">connect</a><ul class='methods'><li data-type='method'><a href="TLS.connect.html#api">api</a></li><li data-type='method'><a href="TLS.connect.html#getTankNames">getTankNames</a></li><li data-type='method'><a href="TLS.connect.html#getTanks">getTanks</a></li><li data-type='method'><a href="TLS.connect.html#request">request</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="TLS.html">TLS</a></li></ul>
 </nav>
 
 <div id="main">
@@ -202,7 +202,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line13">line 13</a>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -251,14 +251,14 @@
 
     
 
-    <h4 class="name" id="api"><span class="type-signature"></span>api<span class="signature">(code, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="api"><span class="type-signature"></span>api<span class="signature">(command, options<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Make a function call</p>
+    <p>Process TLS command</p>
 </div>
 
 
@@ -296,7 +296,7 @@
 
         <tr>
             
-                <td class="name"><code>code</code></td>
+                <td class="name"><code>command</code></td>
             
 
             <td class="type">
@@ -427,181 +427,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line70">line 70</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getTank"><span class="type-signature"></span>getTank<span class="signature">(tankId, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Returns data for the specified tankId</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>tankId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>TLS tank number</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>callback function</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line59">line 59</a>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -775,7 +601,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line35">line 35</a>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -949,7 +775,181 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line47">line 47</a>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="request"><span class="type-signature"></span>request<span class="signature">(command, completed<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Send TLS API request</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>TLS function code</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>completed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Connection close callback</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="server_api.js.html">server/api.js</a>, <a href="server_api.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -993,7 +993,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Sat Jul 18 2015 07:12:35 GMT-0400 (EDT) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0</a> on Tue Aug 18 2015 16:58:48 GMT-0400 (EDT) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
