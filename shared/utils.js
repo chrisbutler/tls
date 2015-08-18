@@ -27,20 +27,23 @@ TLS.utils.parse = {
 
 TLS.utils.time = {
   local: function(response) {
-    var time = response.substr(7, 10);
+    var time = response.substr(6, 10);
+    var d = 0;
     var h = time.match(/.{2}/g);
-    h[0] = '20' + h[0];
-    h[1]--;
 
-    var d = moment(h);
+    if(h != null) {
+      h[0] = '20' + h[0];
+      h[1]--;
+      var d = moment().utc(h);
+    }
+
     return d;
   },
   offset: function(response) {
     var d = this.local(response);
-    var o = ((d - moment()) / 60000) / 60;
+    var o = ((d - moment().utc()) / 60000) / 60;
     return Math.round(o);
   }
-
 }
 
 TLS.utils.tanks = {
@@ -74,7 +77,7 @@ TLS.utils.tanks = {
   names: function(data) {
     data = data.replace(/(\s\d{1}\s+\b\w+\b)\s(\b\w+\b)/g, "$1-$2");
 
-    var list = data.match(/[\d\.\w\-]+/g);
+    var list = data.match(/[\d\.\w\-]+/g) || [];
     list.shift();
     list.splice(0, 23);
 
