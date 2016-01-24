@@ -10,9 +10,12 @@ Connects to a TLS-350 tank monitoring system and returns json-formatted tank inf
 
 ### Example Usage
 
-```
+```javascript
 var myTLS = new TLS.connect('<ip address>', <port number>);
 
 console.log(myTLS.getTanks());
 
 ```
+
+### License
+This project is open source software under the GNU AGPL. Please see the license file for details.

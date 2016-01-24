@@ -1,6 +1,8 @@
 var net = Npm.require('net');
 var future = Npm.require('fibers/future');
 
+var log = new Logger('tls:api');
+
 var SOH = String.fromCharCode(1);
 var ETX = String.fromCharCode(3);
 
@@ -14,6 +16,8 @@ var MAX_RETRIES = 3;
  * @param {Array} tankNames Product List
  */
 TLS.connect = function TLS(ip, port, tankNames) {
+	log.debug('tls connect', ip, port);
+
 	var fut = new future();
 
 	this.ip = ip;
@@ -39,8 +43,10 @@ TLS.connect = function TLS(ip, port, tankNames) {
  */
 TLS.connect.prototype.getTankNames = function getTankNames(cb) {
 	var res = this.api('200', cb);
-	this.offset = TLS.utils.time.offset(res);
-  res = TLS.utils.tanks.names(res);
+	if (res) {
+		this.offset = TLS.utils.time.offset(res);
+  	res = TLS.utils.tanks.names(res);
+	}
   return res;
 }
 
@@ -51,8 +57,10 @@ TLS.connect.prototype.getTankNames = function getTankNames(cb) {
  */
 TLS.connect.prototype.getTanks = function getTanks(cb) {
 	var res = this.api('i20100', cb);
-	this.offset = TLS.utils.time.offset(res);
-	res = TLS.utils.tanks.extract(res, this.tankNames);
+	if (res) {
+		this.offset = TLS.utils.time.offset(res);
+		res = TLS.utils.tanks.extract(res, this.tankNames);
+	}
 	return res;
 }
 
@@ -62,9 +70,12 @@ TLS.connect.prototype.getTanks = function getTanks(cb) {
 * @param  {Function} [completed] Connection close callback
  */
 TLS.connect.prototype.request = function setup(command, completed) {
+	log.debug('tls request', command);
+
 	var fut	= new future(),
 		timer = new Date(),
-		_tls 	= this;
+		_tls 	= this,
+		errorHandled = false;
 
 	command = SOH + command;
 	var responseString = '';
@@ -74,16 +85,23 @@ TLS.connect.prototype.request = function setup(command, completed) {
 	c.setTimeout(2000);
 
 	c.on('connect', function() {
-		console.log(_tls.ip + ' connected (' + command + ')');
+		log.info(_tls.ip + ' connected (' + command + ')');
 		clearInterval(_tls.retryInterval);
 		this.write(command);
 	});
 
 	c.on('error', function(err) {
 		if (err.code == 'ECONNREFUSED') {
-			console.log(_tls.ip + ' retrying (' + err.code + ')');
+			log.info(_tls.ip + ' retrying (' + err.code + ')');
+			errorHandled = true;
+			setTimeout(function() {
+				fut.return(false);
+			}, 2000);
+		} else if (err.code == 'ENETUNREACH') {
+			log.info(_tls.ip + ' unreachable (' + err.code + ')');
 		} else {
-			console.log(_tls.ip + ' error (' + err + ')');
+			log.info(_tls.ip + ' error (' + err + ')');
+			errorHandled = true;
 			fut.throw(err);
 		}
 	});
@@ -107,17 +125,21 @@ TLS.connect.prototype.request = function setup(command, completed) {
 	});
 
 	c.on('close', function(hadError) {
-		console.log(_tls.ip + ' closed ([' + c.bytesRead + '] err: ' + hadError + ')');
-		if (c.bytesRead > 0 && responseString.length > 0) {
+		log.info(_tls.ip + ' closed ([' + c.bytesRead + '] err: ' + hadError + ') (' + (new Date() - timer) + 'ms)');
+		if (!hadError && c.bytesRead > 0 && responseString.length > 0) {
 			fut.return(responseString);
 			typeof completed === 'function' && completed();
-		} else {
+		} else if (!errorHandled) {
 			fut.return(false);
 		}
 	});
 
 	c.on('end', function() {
-		console.log(_tls.ip + ' disconnected (' + (new Date() - timer) + 'ms)');
+		log.info(_tls.ip + ' disconnected (' + (new Date() - timer) + 'ms)');
+	});
+
+	c.on('timeout', function() {
+		log.info(_tls.ip + ' timeout (' + (new Date() - timer) + 'ms)');
 	});
 
 	return fut.wait();
@@ -130,36 +152,32 @@ TLS.connect.prototype.request = function setup(command, completed) {
 * @param  {Function} [callback] Function to execute on completion
  */
 TLS.connect.prototype.api = function api(command, options, callback) {
+	log.debug('tls api', command);
+
 	var response = new future(),
 					_tls = this,
-			 retries = 0;
+			 retries = 1,
+			 success = false;
 
 	if (typeof options === 'function' && !callback) {
 		callback = options;
 		options = undefined;
 	}
 
-	var request = _tls.request(command);
-
-	if (!request) {
-		_tls.retryInterval = Meteor.setInterval(function() {
-			request = _tls.request(command, function() {
-				Meteor.clearInterval(_tls.retryInterval);
-
-				typeof callback === 'function' && callback();
-				response.return(request);
-			});
-
-			if (retries >= MAX_RETRIES) {
-				Meteor.clearInterval(_tls.retryInterval);
-				retries = 0;
-			}
-
+	do {
+		var request = _tls.request(command);
+		if (request) {
+			typeof callback === 'function' && callback();
+			response.return(request);
+			success = true;
+			break;
+		} else {
 			retries++;
-		}, 1000);
-	} else {
-		typeof callback === 'function' && callback();
-		response.return(request);
+		}
+	} while (retries <= MAX_RETRIES);
+
+	if (!success) {
+		response.return(false);
 	}
 
   return response.wait();
